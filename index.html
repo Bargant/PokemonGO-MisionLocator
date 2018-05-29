@@ -20,14 +20,15 @@
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   </head>
   <body>
+    Copia aquí la lista de misiones de telegram:<br>
     <div>
     	<textarea rows="4" cols="50" id='telTxt'></textarea><button id='mostrar' value='Mostrar' />
     </div>
     <div id="map"></div>
     <script>
 	$( document ).ready(function() {
-	   $('#mostrar').click(function() {
-		  initMap(telTxt);
+		$('#mostrar').click(function() {
+		  initMap();
 		});
 	});
 	    
