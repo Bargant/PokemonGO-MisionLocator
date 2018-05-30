@@ -40,9 +40,10 @@
 	});
 	    
       function initMap() {
-	        telegram = $('#telTxt').val();
+	        var telegram = $('#telTxt').val();
 		var splited = telegram.split("\n");
 		var currentMision = "";
+	      	var locations = [];
 		for (key in splited)
 		{
 			var line = splited[key];
@@ -71,7 +72,7 @@
           return new google.maps.Marker({
             position: location.loc,
             label: location.mision,
-			title: location.desc
+	    title: location.desc
           });
         });
         // Add a marker clusterer to manage the markers.
@@ -91,11 +92,6 @@
 		return decodeURIComponent(results[2].replace(/\+/g, " "));
 	}
 	
-	
-      var locations = [];
-	  
-	  var telegram = ``;
-		
     </script>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
     </script>
