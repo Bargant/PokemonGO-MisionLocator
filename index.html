@@ -39,15 +39,19 @@
 		});
 	});
 	    
-      function initMap() {
-	        var telegram = $('#telTxt').val();
+      function initMap() {var telegram = $('#telTxt').val();
 		var splited = telegram.split("\n");
 		var currentMision = "";
-	      	var locations = [];
+		var currentReward = "";
+		var locations = [];
 		for (key in splited)
 		{
 			var line = splited[key];
-			if (line.startsWith("Misión")) currentMision = line;
+			if (line.startsWith("Misión")) {
+				var guionPos = line.indexOf(" - ");
+				currentMision = line.substring(0, guionPos);;
+				currentReward = line.substring(guionPos+3);;
+			}
 			if (line.includes("https://www.")) 
 			{
 				var urlPos = line.indexOf("https://www.");
@@ -55,7 +59,7 @@
 				var parada = line.substring(0, urlPos-3);
 				var pos = getParameterByName("q", url).split(",");
 				
-				locations.push({loc: {lat: parseFloat(pos[0]), lng: parseFloat(pos[1])}, desc: parada, mision: currentMision});
+				locations.push({loc: {lat: parseFloat(pos[0]), lng: parseFloat(pos[1])}, desc: parada, mision: currentMision, reward: currentReward});
 			}
 			console.log(currentMision);
 		}
@@ -68,18 +72,28 @@
         // Note: The code uses the JavaScript Array.prototype.map() method to
         // create an array of markers based on a given "locations" array.
         // The map() method here has nothing to do with the Google Maps API.
+	
+	      
         var markers = locations.map(function(location, i) {
-          return new google.maps.Marker({
-            position: location.loc,
-            label: location.mision,
-	    title: location.desc
-          });
+		var infowindow = new google.maps.InfoWindow({
+		  content: "<p><b>"+currentMision+"</b></p><p>"+location.desc+"</p>"
+		});
+		
+		var marker = new google.maps.Marker({
+		    position: location.loc,
+		    label: location.reward
+		  });
+		
+		marker.addListener('click', function() {
+		  infowindow.open(map, marker);
+		});
+          return marker;
         });
         // Add a marker clusterer to manage the markers.
         var markerCluster = new MarkerClusterer(map, markers,
             {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-      }
-	  
+      }	  
+	    
 	  
 	
 	function getParameterByName(name, url) {
